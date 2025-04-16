@@ -45,10 +45,11 @@ Run it with:
 go run backend.go
 3. Update the proxy target (in main.go)
 Change the target URL to your backend:
-
 targetURL, err := url.Parse("http://localhost:9000")
+
 4. Run the proxy
 go run main.go
+
 5. Test it
 Proxy some requests:
 curl http://localhost:8080/
@@ -63,6 +64,7 @@ Example output:
   "total_requests": 2,
   "uptime": "35s"
 }
+
 📦 Dependencies
 Standard Go library only (net/http, httputil, etc.)
 
