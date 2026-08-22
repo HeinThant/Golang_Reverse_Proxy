@@ -1,77 +1,66 @@
-# 🔁 Golang Reverse Proxy Server
+# Go Reverse Proxy
 
-A simple reverse proxy server written in Go that forwards requests to a target backend and provides a `/status` endpoint to monitor usage.
+A practical reverse proxy built with Go to demonstrate HTTP request forwarding, backend routing, and basic service abstraction.
 
-## 🚀 Features
+This project supports my backend/platform engineering portfolio by showing the network-facing layer that often sits between clients and internal services.
 
-- ✅ Reverse proxy to any backend
-- 📊 `/status` endpoint shows:
-  - Total proxied requests
-  - Server uptime
-  - Backend URL
-  - Local server IP
-- 🌐 Fully HTTP-based (easy to test locally)
+## What It Demonstrates
 
-## 🛠 Setup
+- Reverse proxy behavior using Go standard library packages
+- Forwarding client requests to an upstream backend service
+- Separating client-facing endpoints from backend implementation details
+- Local testing with a simple backend server
+- Foundation concepts used by API gateways, load balancers, and service proxies
 
-### 1. Clone the repo (or copy the code)
+## Architecture
 
-``bash
-git clone <your-repo-url>
-cd golang-reverse-proxy
-2. Run a local backend (optional)
-To test the proxy locally, run this simple backend on port 9000:
+```text
+Client
+  |
+  v
+Reverse Proxy
+  |
+  v
+Backend Service
+```
 
-// backend.go
-package main
+The client communicates with the proxy, while the proxy forwards traffic to the backend service and returns the backend response.
 
-import (
-	"fmt"
-	"log"
-	"net/http"
-)
+## Tech Stack
 
-func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello from backend: %s", r.URL.Path)
-	})
+- Go
+- `net/http`
+- Reverse proxy concepts
+- Local service testing
 
-	log.Println("✅ Backend running at http://localhost:9000")
-	http.ListenAndServe(":9000", nil)
-}
-Run it with:
+## How To Run
 
+Start the backend service:
 
+```bash
 go run backend.go
-3. Update the proxy target (in main.go)
-Change the target URL to your backend:
-targetURL, err := url.Parse("http://localhost:9000")
+```
 
-4. Run the proxy
-go run main.go
+Start the reverse proxy in another terminal:
 
-5. Test it
-Proxy some requests:
-curl http://localhost:8080/
-curl http://localhost:8080/hello
-Check proxy status:
-curl http://localhost:8080/status
-Example output:
-{
-  "server_ip": "192.168.1.100",
-  "status": "running",
-  "target_backend": "http://localhost:9000",
-  "total_requests": 2,
-  "uptime": "35s"
-}
+```bash
+go run reverse_proxy_server.go
+```
 
-📦 Dependencies
-Standard Go library only (net/http, httputil, etc.)
+Send a request to the proxy endpoint according to the configured port in the source code.
 
-No third-party packages needed
+## Production Considerations
 
-📘 License
-MIT License
+For a production-grade reverse proxy, I would add:
 
-✍️ Author
-Hein (with help from ChatGPT 😉)
+- Config-driven upstream targets
+- Structured logging with correlation/request IDs
+- Request and response timeout controls
+- Authentication and authorization at the proxy boundary
+- TLS handling
+- Health checks and failover behavior
+- Metrics for latency, status codes, and upstream errors
+
+## Why This Project Matters
+
+Reverse proxying is a core concept behind API gateways, ingress controllers, load balancers, and secure backend integrations. This project keeps the implementation small so the routing behavior is easy to inspect.
